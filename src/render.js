@@ -1,26 +1,33 @@
+// Basic Setup and Imports.
+const { desktopCapturer, remote } = require("electron");
+const { Menu } = remote;
+let mediaRecorder; // MediaRecorder instance to capture the footage
+const recordedChunks = [];
+const { dialog } = remote;
+const { writeFile } = require("fs");
+
 // Buttons
 const videoElement = document.querySelector("video");
-
 const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+const videoSelectBtn = document.getElementById("videoSelectBtn");
+videoSelectBtn.onclick = getVideoSources;
+
+// Start Button Function
 startBtn.onclick = (e) => {
   mediaRecorder.start();
   startBtn.classList.add("is-danger");
   startBtn.innerText = "Recording";
 };
 
-const stopBtn = document.getElementById("stopBtn");
-
+// Stop Button Function
 stopBtn.onclick = (e) => {
   mediaRecorder.stop();
   startBtn.classList.remove("is-danger");
   startBtn.innerText = "Start";
 };
-const videoSelectBtn = document.getElementById("videoSelectBtn");
-videoSelectBtn.onclick = getVideoSources;
 
-const { desktopCapturer, remote } = require("electron");
-const { Menu } = remote;
-
+// Get the available video sources
 async function getVideoSources() {
   const inputSources = await desktopCapturer.getSources({
     types: ["window", "screen"],
@@ -37,9 +44,6 @@ async function getVideoSources() {
 
   videoOptionsMenu.popup();
 }
-
-let mediaRecorder; // MediaRecorder instance to capture the footage
-const recordedChunks = [];
 
 // Change the videoSource window to record
 
@@ -79,10 +83,6 @@ function handleDataAvaialable(e) {
   console.log("video data available");
   recordedChunks.push(e.data);
 }
-
-const { dialog } = remote;
-
-const { writeFile } = require("fs");
 
 //Save the video file on stop
 async function handleStop(e) {

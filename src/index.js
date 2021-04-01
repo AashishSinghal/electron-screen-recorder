@@ -12,8 +12,8 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 1366,
     height: 768,
-    webPreferences: {
-      nodeIntegration: true,
+    webPreferences: {                   /// <-- update this option, To enable the render.js functions.
+      nodeIntegration: true,           /// <-- the  require() will not work if this code block is not included.
       contextIsolation: false,
       enableRemoteModule: true,
     },
